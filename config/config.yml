@@ -1,0 +1,40 @@
+server:
+  address: 127.0.0.1:8630
+pcap:
+  devices:
+    - prefix: any
+      duration: 2s
+      snaplen: 120 # bytes
+      promisc: true
+  #    - prefix: ens192
+  #      duration: 2s
+  #      snaplen: 120 # bytes
+  #      promisc: true
+  par-type: routine # routine | reactor
+  routine:
+    parallelism: 4
+  reactor:
+    buffer: 2048
+collect:
+  server-type: grpc            # grpc | http | log
+  server-addr: localhost:50051 # localhost:50051 | "http://127.0.0.1:8630/collect"
+  parallelism: 1
+  par-buff-size: 64
+logging:
+  factory: zap      # zap | logrus
+  formatter: normal # normal | json
+  appenders:
+    - type: stdout
+#    - type: file
+#      options:
+#        log-file-dir: ./logs
+#        log-file-name: application.log
+#        max-file-size: 52428800 # 字节
+#        max-file-backups: 20
+#        max-file-age: 86400s
+#        local-time: true
+#        compress: true
+  root-name: learngolang
+  root-level: INFO
+  package-levels:
+    "protocol/ip/tcp": WARN

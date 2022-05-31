@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Config
+preferences: {}
+current-context: monitor@kubernetes
+clusters:
+  - cluster:
+      # certificate-authority: /etc/kubernetes/pki/ca.crt
+      # cat ca.crt | base64 -w 0
+      certificate-authority-data: LS0tLS1CRUdJTiB ...
+      server: https://192.168.1.1:6443
+    name: kubernetes
+users:
+  - name: monitor
+    user:
+      # client-certificate: /tmp/monitor.crt
+      # client-key: /tmp/monitor.key
+      # cat monitor.crt | base64 -w 0
+      client-certificate-data: LS0tLS1CRUdJTiB ...
+      # cat monitor.key | base64 -w 0
+      client-key-data: LS0tLS1CRUdJTiBSU0E ...
+contexts:
+  - name: monitor@kubernetes
+    context:
+      cluster: kubernetes
+      user: monitor

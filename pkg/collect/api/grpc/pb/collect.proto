@@ -1,0 +1,126 @@
+// Copyright 2015 gRPC authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+option go_package = "../pb";
+option java_multiple_files = true;
+option java_package = "com.github.jeevan86.learngolang.collect.api.grpc.pb";
+option java_outer_classname = "CollectController";
+
+package grpc;
+
+service collect {
+  rpc save(NetStaticsReq) returns (NetStaticsRsp) {}
+  rpc localIp(LocalIpReq) returns (LocalIpRsp) {}
+}
+
+message LocalIpReq {
+  string node_ip = 1;
+}
+
+message LocalIpRsp {
+  LocalIpLst data = 1;
+}
+
+message LocalIpLst {
+  repeated string ip_list = 1;
+}
+
+// The request message containing the user's name.
+message NetStaticsReq {
+  string   gather_ip = 1;
+  int64    timestamp = 2;
+  Protocol ip6 = 3;
+  Protocol ip4 = 4;
+}
+
+message Protocol {
+  repeated Tcp  tcp = 1;
+  repeated Udp  udp = 2;
+  repeated Icmp icmp = 3;
+  repeated Igmp igmp = 4;
+}
+
+message Tcp {
+  string source_ip_addr = 1;       // 源端ip
+  string target_ip_addr = 2;       // 目标ip
+  uint64 send_total_byte = 3;      // 发送字节数
+  uint64 receive_total_byte = 4;   // 接收字节数
+  uint64 send_total_packet = 5;    // 客户端数据包数
+  uint64 receive_total_packet = 6; // 服务器数据包数
+  uint64 total_packet = 7;         // 总数据包量
+  uint64 total_bytes = 8;          // 总数据包字节数
+  int32  source_port = 9;          // 源端口
+  int32  target_port = 10;         // 目标端口
+  uint64 syn_count = 11;           // 连接syn包总数
+  uint64 syn_ack_count = 12;       // 连接syn-ack包总数
+  uint64 syn_ack_ack_count = 13;   // 连接syn-ack-ack包总数
+  uint64 fin_count = 14;           // 断开fin包总数
+  uint64 fin_ack_count = 15;       // 断开fin-ack包总数
+  uint64 ack_count = 16;           // 普通ack包总数
+  uint64 reset_count = 17;         // 连接reset总数
+  uint64 retransmit = 18;          // 重传的总次数
+  int64 rtt = 19;                  // tcp套接字的平均往返时间
+}
+
+message Udp {
+  string source_ip_addr = 1;       // 源端ip
+  string target_ip_addr = 2;       // 目标ip
+  uint64 send_total_byte = 3;      // 发送字节数
+  uint64 receive_total_byte = 4;   // 接收字节数
+  uint64 send_total_packet = 5;    // 客户端数据包数
+  uint64 receive_total_packet = 6; // 服务器数据包数
+  uint64 total_packet = 7;         // 总数据包量
+  uint64 total_bytes = 8;          // 总数据包字节数
+  int32  source_port = 9;          // 源端口
+  int32  target_port = 10;         // 目标端口
+}
+
+message Icmp {
+  string source_ip_addr = 1;       // 源端ip
+  string target_ip_addr = 2;       // 目标ip
+  uint64 send_total_byte = 3;      // 发送字节数
+  uint64 receive_total_byte = 4;   // 接收字节数
+  uint64 send_total_packet = 5;    // 客户端数据包数
+  uint64 receive_total_packet = 6; // 服务器数据包数
+  uint64 total_packet = 7;         // 总数据包量
+  uint64 total_bytes = 8;          // 总数据包字节数
+}
+
+message Igmp {
+  string source_ip_addr = 1;       // 源端ip
+  string target_ip_addr = 2;       // 目标ip
+  uint64 send_total_byte = 3;      // 发送字节数
+  uint64 receive_total_byte = 4;   // 接收字节数
+  uint64 send_total_packet = 5;    // 客户端数据包数
+  uint64 receive_total_packet = 6; // 服务器数据包数
+  uint64 total_packet = 7;         // 总数据包量
+  uint64 total_bytes = 8;          // 总数据包字节数
+}
+
+message Ip {
+  string source_ip_addr = 1;       // 源端ip
+  string target_ip_addr = 2;       // 目标ip
+  uint64 send_total_byte = 3;      // 发送字节数
+  uint64 receive_total_byte = 4;   // 接收字节数
+  uint64 send_total_packet = 5;    // 客户端数据包数
+  uint64 receive_total_packet = 6; // 服务器数据包数
+  uint64 total_packet = 7;         // 总数据包量
+  uint64 total_bytes = 8;          // 总数据包字节数
+}
+
+message NetStaticsRsp {
+  string message = 1;
+}

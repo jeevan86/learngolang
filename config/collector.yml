@@ -1,0 +1,20 @@
+server:
+  address: 127.0.0.1:8631
+logging:
+  factory: zap # zap | logrus
+  formatter: normal # normal | json
+  appenders:
+    # - type: file
+    #   options:
+    #     log-file-dir: ./logs
+    #     log-file-name: application.log
+    #     max-file-size: 52428800 # 字节
+    #     max-file-backups: 20
+    #     max-file-age: 86400s
+    #     local-time: true
+    #     compress: true
+    - type: stdout
+  root-name: learngolang
+  root-level: INFO
+  package-levels:
+    "protocol/ip/tcp": WARN
