@@ -1,0 +1,55 @@
+// +build ignore
+
+#include <version.h>
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,4,0)
+
+#include "common.h"
+
+char __license[] SEC("license") = "Dual MIT/GPL";
+
+static __always_inline
+void __kprobe_load_sec(struct bpf_map_def *pMap, u32 *pKey, u64 *pInitval) {
+    u64 *valp;
+	valp = bpf_map_lookup_elem(pMap, pKey);
+	if (!valp) {
+		bpf_map_update_elem(pMap, pKey, pInitval, BPF_ANY);
+		return;
+	}
+	__sync_fetch_and_add(valp, 1);
+}
+
+struct bpf_map_def SEC("maps") KprobeMap = {
+	.type        = BPF_MAP_TYPE_ARRAY,
+	.key_size    = sizeof(u32),
+	.value_size  = sizeof(u64),
+	.max_entries = 20,
+};
+
+SEC("kprobe/sys_execve")
+int kprobe_execve() {
+    u32 kpk_sys_execve = 0;
+	u64 initval = 1;
+	__kprobe_load_sec(&KprobeMap, &kpk_sys_execve, &initval);
+	return 0;
+}
+
+SEC("kprobe/sys_connect")
+int kprobe_connect() {
+    u32 kpk_sys_connect = 1;
+	u64 initval = 1;
+	__kprobe_load_sec(&KprobeMap, &kpk_sys_connect, &initval);
+	return 0;
+}
+
+SEC("kprobe/sys_accept")
+int kprobe_accept() {
+    u32 kpk_sys_accept = 2;
+	u64 initval = 1;
+	__kprobe_load_sec(&KprobeMap, &kpk_sys_accept, &initval);
+	return 0;
+}
+
+#else
+
+#endif

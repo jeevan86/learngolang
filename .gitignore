@@ -1,3 +1,7 @@
 .idea/
 dist/
 vendor/
+bpf_bpfe*.o
+bpf_bpfe*.go
+bpf_bpfe*.*.d
+*.pb.go
