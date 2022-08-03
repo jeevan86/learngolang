@@ -85,7 +85,7 @@ func updateNode(obj interface{}) {
 
 func newNodeIpMeta(name, ip string) *NodeIpMeta {
 	meta := &NodeIpMeta{
-		ClusterId: *flag.ClusterId,
+		ClusterId: *flag.KubeClusterId,
 		Name:      name,
 		Ip:        ip,
 	}

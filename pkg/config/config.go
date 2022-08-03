@@ -70,7 +70,7 @@ func load() {
 	if instance != nil {
 		return
 	}
-	path := *flag2.ConfFile
+	path := *flag2.ConfigFile
 	yml, err := ioutil.ReadFile(path)
 	if err != nil {
 		log.Printf("解析配置错误：%s，使用默认配置。%s", err.Error(), defaultYml)

@@ -41,7 +41,7 @@ var interesting = new(interestInformers)
 
 func newClient() kubernetes.Interface {
 	// use the current context in kube config
-	config, err := clientcmd.BuildConfigFromFlags("", *cfg.KubeConfig)
+	config, err := clientcmd.BuildConfigFromFlags("", *cfg.KubeConfigFile)
 	if err != nil {
 		panic(err.Error())
 	}

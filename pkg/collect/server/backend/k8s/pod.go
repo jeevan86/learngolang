@@ -76,7 +76,7 @@ func updatePod(obj interface{}) {
 func newIpMeta(namespace, podName, podIp, hostIp string) *PodIpMeta {
 	meta := &PodIpMeta{
 		ResIpMeta: ResIpMeta{
-			ClusterId: *flag.ClusterId,
+			ClusterId: *flag.KubeClusterId,
 			Namespace: namespace,
 		},
 		PodName: podName,

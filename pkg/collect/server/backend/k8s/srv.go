@@ -95,7 +95,7 @@ func workload(namespace string, selector map[string]string) string {
 func newSrvIpMeta(namespace, name, ip, appName string) *SrvIpMeta {
 	meta := &SrvIpMeta{
 		ResIpMeta: ResIpMeta{
-			ClusterId: *flag.ClusterId,
+			ClusterId: *flag.KubeClusterId,
 			Namespace: namespace,
 		},
 		Name:    name,
