@@ -21,7 +21,7 @@ var c = NewClient(serverAddr)
 
 func Test_Save(t *testing.T) {
 	// Contact the server and print out its response.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
 	r, err := c.Save(ctx, &pb.NetStaticsReq{GatherIp: nodeIp})
 	if err != nil {
@@ -32,7 +32,7 @@ func Test_Save(t *testing.T) {
 
 func Test_LocalIp(t *testing.T) {
 	// Contact the server and print out its response.
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancel()
 	r, err := c.LocalIp(ctx, &pb.LocalIpReq{NodeIp: nodeIp})
 	if err != nil {

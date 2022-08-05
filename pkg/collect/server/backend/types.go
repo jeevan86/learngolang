@@ -7,6 +7,7 @@ const (
 	IpPortTypeK8sPod    IpPortType = "k8sPod"
 	IpPortTypeK8sSrv    IpPortType = "k8sService"
 	IpPortTypeComponent IpPortType = "component"
+	IpPortTypeHost      IpPortType = "host"
 	IpPortTypeUnknown   IpPortType = "unknown"
 )
 
@@ -20,18 +21,14 @@ const (
 type IpProtocol string
 
 const (
-	IpProtocolTcp4 IpProtocol = "tcp4"
-	IpProtocolUdp4 IpProtocol = "udp4"
-	IpProtocolTcp6 IpProtocol = "tcp6"
-	IpProtocolUdp6 IpProtocol = "udp6"
+	IpProtocolTcp4    IpProtocol = "tcp4"
+	IpProtocolUdp4    IpProtocol = "udp4"
+	IpProtocolTcp6    IpProtocol = "tcp6"
+	IpProtocolUdp6    IpProtocol = "udp6"
+	IpProtocolUnknown IpProtocol = "unknown"
 )
 
 type Tags map[string]string
-
-type IpPortMeta struct {
-	Type IpPortType `json:"type,omitempty"`
-	Tags Tags       `json:"tags,omitempty"`
-}
 
 type PacketType string
 
@@ -41,13 +38,20 @@ const (
 	PacketTypeUnknown PacketType = "unknown"
 )
 
+type IpPort struct {
+	Ip   string `json:"ip,omitempty" yaml:"ip"`
+	Port int32  `json:"port,omitempty" yaml:"port"`
+}
+
+type IpPortMeta struct {
+	IpPort
+	Type IpPortType `json:"type,omitempty"`
+	Tags Tags       `json:"tags,omitempty"`
+}
+
 type ChannelPacketMeta struct {
-	Protocol IpProtocol  `json:"protocol,omitempty"`
-	Type     PacketType  `json:"type,omitempty"`
-	SrcIp    string      `json:"srcIp,omitempty"`
-	SrcPort  int32       `json:"srcPort,omitempty"`
-	SrcMeta  *IpPortMeta `json:"srcMeta,omitempty"`
-	DstIp    string      `json:"dstIp,omitempty"`
-	DstPort  int32       `json:"dstPort,omitempty"`
-	DstMeta  *IpPortMeta `json:"dstMeta,omitempty"`
+	Protocol  IpProtocol  `json:"protocol,omitempty"`
+	Type      PacketType  `json:"type,omitempty"`
+	SrcIpPort *IpPortMeta `json:"srcIpPort,omitempty"`
+	DstIpPort *IpPortMeta `json:"dstIpPort,omitempty"`
 }

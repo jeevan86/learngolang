@@ -5,6 +5,12 @@ import (
 	"github.com/jeevan86/learngolang/pkg/util/jsonutl"
 )
 
+type IpPortMetaConsumer interface {
+	Apply(*backend.ChannelPacketMeta)
+}
+
+var consumer = newConsumer()
+
 type loggingConsumer int8
 
 func (c *loggingConsumer) Apply(meta *backend.ChannelPacketMeta) {
