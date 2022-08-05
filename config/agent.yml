@@ -1,25 +1,26 @@
 server:
   address: 127.0.0.1:8661
-pcap:
-  devices:
-    - prefix: any
-      duration: 2s
-      snaplen: 120 # bytes
-      promisc: true
-  #    - prefix: ens192
-  #      duration: 2s
-  #      snaplen: 120 # bytes
-  #      promisc: true
-  par-type: routine # routine | reactor
-  routine:
-    parallelism: 4
-  reactor:
-    buffer: 2048
-collect:
-  server-type: http # grpc | http | log
-  server-addr: "http://127.0.0.1:8630/collect" # localhost:50051 | "http://127.0.0.1:8630/collect"
-  parallelism: 1
-  par-buff-size: 64
+agent:
+  pcap:
+    devices:
+      - prefix: any
+        duration: 2s
+        snaplen: 120 # bytes
+        promisc: true
+    #    - prefix: ens192
+    #      duration: 2s
+    #      snaplen: 120 # bytes
+    #      promisc: true
+    par-type: routine # routine | reactor
+    routine:
+      parallelism: 4
+    reactor:
+      buffer: 2048
+  collect:
+    server-type: http # grpc | http | log
+    server-addr: "http://127.0.0.1:8630/collect" # localhost:50051 | "http://127.0.0.1:8630/collect"
+    parallelism: 1
+    par-buff-size: 64
 logging:
   factory: zap # zap | logrus
   formatter: normal # normal | json

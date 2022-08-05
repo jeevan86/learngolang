@@ -13,35 +13,66 @@ import (
 )
 
 type config struct {
-	Pcap    packetCapture       `yaml:"pcap"`
-	Collect collect             `yaml:"collect"`
-	Server  serverConfig        `yaml:"server"`
-	Logging lf4go.LoggingConfig `yaml:"logging"`
-	NodeIp  string              `yaml:"node-ip"`
+	Server    *serverConfig        `yaml:"server"`
+	Agent     *agentConfig         `yaml:"agent"`
+	Collector *collectorConfig     `yaml:"collector"`
+	Logging   *lf4go.LoggingConfig `yaml:"logging"`
+	NodeIp    *string              `yaml:"node-ip"`
 }
 
 var defaultYml = `
 server:
   address: 127.0.0.1:8630
-pcap:
-  devices:
-    - prefix: any
-      duration: 2s
-      snaplen: 120 # bytes
-      promisc: true
-  #    - prefix: ens192
-  #      duration: 2s
-  #      snaplen: 120 # bytes
-  #      promisc: true
-  routine:
-    parallelism: 4
-  reactor:
-    buffer: 2048
-collect:
-  server-type: http # grpc | http | log
-  server-addr: "http://127.0.0.1:8630/collect" # localhost:50051 | "http://127.0.0.1:8630/collect"
-  parallelism: 1
-  par-buff-size: 64
+agent:
+  pcap:
+    devices:
+      - prefix: any
+        duration: 2s
+        snaplen: 120 # bytes
+        promisc: true
+    #    - prefix: ens192
+    #      duration: 2s
+    #      snaplen: 120 # bytes
+    #      promisc: true
+    routine:
+      parallelism: 4
+    reactor:
+      buffer: 2048
+  collect:
+    server-type: http # grpc | http | log
+    server-addr: "http://127.0.0.1:8630/collect" # localhost:50051 | "http://127.0.0.1:8630/collect"
+    parallelism: 1
+    par-buff-size: 64
+collector:
+  # kube-config-file: /path/to/kube-conf.yml
+  kube-config-data: |-
+    apiVersion: v1
+    kind: Config
+    preferences: {}
+    current-context: monitor@kubernetes
+    clusters:
+      - cluster:
+          # certificate-authority: /etc/kubernetes/pki/ca.crt
+          # cat ca.crt | base64 -w 0
+          certificate-authority-data: LS0tLS1CRUdJTiB ...
+          server: https://192.168.1.1:6443
+        name: kubernetes
+    users:
+      - name: monitor
+        user:
+          # client-certificate: /tmp/monitor.crt
+          # client-key: /tmp/monitor.key
+          # cat monitor.crt | base64 -w 0
+          client-certificate-data: LS0tLS1CRUdJTiB ...
+          # cat monitor.key | base64 -w 0
+          client-key-data: LS0tLS1CRUdJTiBSU0E ...
+    contexts:
+      - name: monitor@kubernetes
+        context:
+          cluster: kubernetes
+          user: monitor
+  host: 0.0.0.0
+  port: 50051
 logging:
   factory: zap # zap | logrus
   formatter: normal # normal | json
@@ -86,7 +117,7 @@ func load() {
 }
 
 // getNodeIp 先从环境变量NODE_IP_ADDR获得配置的IP，如果没有，再根据hostname获取
-func getNodeIp() string {
+func getNodeIp() *string {
 	nodeIp, ok := os.LookupEnv("NODE_IP_ADDR")
 	if !ok {
 		hn, e := os.Hostname()
@@ -100,5 +131,5 @@ func getNodeIp() string {
 			}
 		}
 	}
-	return nodeIp
+	return &nodeIp
 }
