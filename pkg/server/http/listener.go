@@ -11,8 +11,8 @@ var server = &http.Server{}
 func Start() {
 	address := config.GetConfig().Server.Address
 	go func() {
-		for _, handler := range handlers {
-			http.Handle(handler.path, handler)
+		for _, h := range handlers {
+			http.Handle(h.path, h)
 		}
 		server.Addr = address
 		server.Handler = nil

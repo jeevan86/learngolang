@@ -15,6 +15,12 @@ type grpcCollector struct {
 	client    pb.CollectClient
 }
 
+// newGrpcCollector
+// @title       创建grpcCollector客户端
+// @description 创建grpcCollector客户端
+// @auth        小卒    2022/08/03 10:57
+// @param       serverAddr string         "服务端地址"
+// @return      r          *grpcCollector "grpcCollector客户端"
 func newGrpcCollector(serverAddr string) *grpcCollector {
 	return &grpcCollector{
 		converter: newConverter(),
@@ -22,6 +28,11 @@ func newGrpcCollector(serverAddr string) *grpcCollector {
 	}
 }
 
+// Collect
+// @title       执行收集
+// @description 执行收集：执行GRPC请求，发送数据
+// @auth        小卒  2022/08/03 10:57
+// @param       msg  *base.OutputStruct "输出的消息"
 func (c *grpcCollector) Collect(msg *base.OutputStruct) {
 	// Contact the server and print out its response.
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
@@ -36,6 +47,12 @@ func (c *grpcCollector) Collect(msg *base.OutputStruct) {
 	}
 }
 
+// GetLocalIpList
+// @title       查询本地IP列表
+// @description 查询本地IP列表
+// @auth        小卒    2022/08/03 10:57
+// @param       nodeIp  string    "节点的IP"
+// @return      l       []string  "本地IP列表"
 func (c *grpcCollector) GetLocalIpList(nodeIp string) []string {
 	// Contact the server and print out its response.
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)

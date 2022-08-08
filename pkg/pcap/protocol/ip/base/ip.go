@@ -5,6 +5,7 @@ import (
 	"github.com/google/gopacket/layers"
 	"github.com/jeevan86/learngolang/pkg/log"
 	"github.com/jeevan86/learngolang/pkg/pcap/protocol/device"
+	"github.com/jeevan86/learngolang/pkg/pcap/protocol/ip"
 	"github.com/jeevan86/learngolang/pkg/util/panics"
 	"github.com/jeevan86/learngolang/pkg/util/tm"
 	"time"
@@ -97,22 +98,30 @@ func (p *PacketProcessor) Out() chan *OutputStruct {
 
 // Process 处理IP包
 func (p *PacketProcessor) Process(packet gopacket.Packet) {
-	v := Version(packet)
-	if v == NotIp {
-		logger.Warn("Not an ip packet.")
-		return
-	} else if v == Ipv4 {
-		ip4 := packet.Layer(layers.LayerTypeIPv4).(*layers.IPv4)
-		if ip4.SrcIP.IsLoopback() || ip4.DstIP.IsLoopback() {
+	// 只处理IP包
+	if ip.IsIpPacket(packet) {
+		v := Version(packet)
+		if v == NotIp {
+			logger.Warn("Not an ip packet.")
 			return
+		} else if v == Ipv4 {
+			ip4 := packet.Layer(layers.LayerTypeIPv4).(*layers.IPv4)
+			if ip4.SrcIP.IsLoopback() || ip4.DstIP.IsLoopback() {
+				return
+			}
+			p.ip4PacketCache.PutPacket(packetTime(packet))
+		} else if v == Ipv6 {
+			ip6 := packet.Layer(layers.LayerTypeIPv4).(*layers.IPv6)
+			if ip6.SrcIP.IsLoopback() || ip6.DstIP.IsLoopback() {
+				return
+			}
+			p.ip6PacketCache.PutPacket(packetTime(packet))
 		}
-		p.ip4PacketCache.PutPacket(packetTime(packet))
-	} else if v == Ipv6 {
-		ip6 := packet.Layer(layers.LayerTypeIPv4).(*layers.IPv6)
-		if ip6.SrcIP.IsLoopback() || ip6.DstIP.IsLoopback() {
-			return
+	} else {
+		// Check for errors
+		if err := packet.ErrorLayer(); err != nil {
+			logger.Warn("Error decoding some part of the packet: %s", err.Error())
 		}
-		p.ip6PacketCache.PutPacket(packetTime(packet))
 	}
 }
 

@@ -3,7 +3,7 @@ package cmdb
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/jeevan86/learngolang/pkg/collect/server/backend"
+	"github.com/jeevan86/learngolang/pkg/collect/server/backend/types"
 	"io"
 	"net/http"
 	"strings"
@@ -62,7 +62,7 @@ type cmdbClient struct {
 // @param       ip     string         "ip地址"
 // @param       port   int32          "端口号"
 // @return      meta   *InstanceMeta  "CMDB对象"
-func (c *cmdbClient) pollInstanceMeta(ipPort *backend.IpPort) *InstanceMeta {
+func (c *cmdbClient) pollInstanceMeta(ipPort *types.IpPort) *InstanceMeta {
 	key := *ipPort
 	r, e := c.httpClient.post(c.baseUrl, JSON, fmt.Sprintf("%s:%d", key.Ip, key.Port))
 	defer closeResponse(r)
@@ -86,7 +86,7 @@ func (c *cmdbClient) pollInstanceMeta(ipPort *backend.IpPort) *InstanceMeta {
 // @param       ip     string         "ip地址"
 // @param       port   int32          "端口号"
 // @return      meta   *InstanceMeta  "CMDB对象"
-func (c *cmdbClient) pollInstanceMetaList(ipPort []*backend.IpPort) *map[backend.IpPort]*InstanceMeta {
+func (c *cmdbClient) pollInstanceMetaList(ipPort []*types.IpPort) *map[types.IpPort]*InstanceMeta {
 	js, _ := json.Marshal(ipPort)
 	reqBody := string(js)
 	r, e := c.httpClient.post(c.baseUrl, JSON, reqBody)
@@ -96,7 +96,7 @@ func (c *cmdbClient) pollInstanceMetaList(ipPort []*backend.IpPort) *map[backend
 		return nil
 	}
 	body, _ := readBody(r)
-	instMetaMap := new(map[backend.IpPort]*InstanceMeta)
+	instMetaMap := new(map[types.IpPort]*InstanceMeta)
 	err := json.Unmarshal([]byte(body), instMetaMap)
 	if err != nil {
 		return nil

@@ -1,4 +1,4 @@
-package backend
+package types
 
 type IpPortType string
 

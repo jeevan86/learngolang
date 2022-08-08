@@ -1,6 +1,8 @@
 package cmdb
 
-import "github.com/jeevan86/learngolang/pkg/collect/server/backend"
+import (
+	"github.com/jeevan86/learngolang/pkg/collect/server/backend/types"
+)
 
 // InstanceMeta 接口传输对象-组件基本属性
 type InstanceMeta struct {
@@ -14,11 +16,11 @@ type InstanceMeta struct {
 
 // ResIpPortMeta 内部数据对象-Ip端口对应的资源信息
 type ResIpPortMeta struct {
-	IpPort     backend.IpPort `json:"ipPort" yaml:"ip-port"`
-	CiId       string         `json:"ciId,omitempty" yaml:"ci-id"`
-	CiName     string         `json:"ciName,omitempty" yaml:"ci-name"`
-	CiTypeId   string         `json:"ciTypeId,omitempty" yaml:"ci-type-id"`
-	CiTypeName string         `json:"ciTypeName,omitempty" yaml:"ci-type-name"`
+	IpPort     types.IpPort `json:"ipPort" yaml:"ip-port"`
+	CiId       string       `json:"ciId,omitempty" yaml:"ci-id"`
+	CiName     string       `json:"ciName,omitempty" yaml:"ci-name"`
+	CiTypeId   string       `json:"ciTypeId,omitempty" yaml:"ci-type-id"`
+	CiTypeName string       `json:"ciTypeName,omitempty" yaml:"ci-type-name"`
 }
 
 // toResIpPortMeta 接口对象转内部对象
@@ -29,7 +31,7 @@ type ResIpPortMeta struct {
 // @return      meta     *ResIpPortMeta "内部对象"
 func toResIpPortMeta(instMeta *InstanceMeta) *ResIpPortMeta {
 	meta := &ResIpPortMeta{
-		IpPort: backend.IpPort{
+		IpPort: types.IpPort{
 			Ip:   instMeta.Ip,
 			Port: instMeta.Port,
 		},

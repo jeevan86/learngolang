@@ -3,7 +3,7 @@ package cmdb
 import (
 	"context"
 	"github.com/dgraph-io/ristretto"
-	"github.com/jeevan86/learngolang/pkg/collect/server/backend"
+	"github.com/jeevan86/learngolang/pkg/collect/server/backend/types"
 	"github.com/reactivex/rxgo/v2"
 	"time"
 )
@@ -49,7 +49,7 @@ func startEvictedRefresher() {
 		).
 		DoOnNext(
 			func(buf interface{}) {
-				items := buf.([]*backend.IpPort)
+				items := buf.([]*types.IpPort)
 				for k, v := range *client.pollInstanceMetaList(items) {
 					if v != nil {
 						transAndCache(&k, v)
@@ -63,7 +63,7 @@ func stopEvictedRefresher() {
 	close(rxCh)
 }
 
-func transAndCache(k *backend.IpPort, instMeta *InstanceMeta) *ResIpPortMeta {
+func transAndCache(k *types.IpPort, instMeta *InstanceMeta) *ResIpPortMeta {
 	// 转换一下
 	meta := toResIpPortMeta(instMeta)
 	// 缓存一下

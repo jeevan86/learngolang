@@ -5,11 +5,30 @@ import (
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
+	"github.com/jeevan86/learngolang/pkg/config"
+	"github.com/jeevan86/learngolang/pkg/log"
+	"os"
 	"strings"
 	"time"
 )
 
-func CreateHandle(duration, device string, snaplen int32, promisc bool) (*pcap.Handle, error) {
+var logger = log.NewLogger()
+
+func StartCapture(process func(packet gopacket.Packet)) {
+	for _, device := range config.GetConfig().Agent.Pcap.Devices {
+		handle, err := createHandle(device.Duration, device.Prefix, device.Snaplen, device.Promisc)
+		if err != nil {
+			// permission issue
+			logger.Fatal("Unable to create handler, cause: %s", err.Error())
+			os.Exit(-1)
+		} else {
+			go func() { startCapture(handle, process) }()
+		}
+	}
+	logger.Info("Packet capture started.")
+}
+
+func createHandle(duration, device string, snaplen int32, promisc bool) (*pcap.Handle, error) {
 	// 设置1秒？
 	secs, _ := time.ParseDuration(duration)
 	//handle, err := pcap.OpenLive("en0", 40, true, secs)
@@ -22,7 +41,7 @@ func CreateHandle(duration, device string, snaplen int32, promisc bool) (*pcap.H
 
 const maxIdxPerCycle = ^uint64(0) - 99999999
 
-func StartCapture(handle *pcap.Handle, captured func(uint64, gopacket.Packet)) {
+func startCapture(handle *pcap.Handle, process func(packet gopacket.Packet)) {
 	packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
 	cycle := uint64(0)
 	idx := uint64(0)
@@ -33,6 +52,7 @@ func StartCapture(handle *pcap.Handle, captured func(uint64, gopacket.Packet)) {
 		}
 		idx++
 	}
+	captured := captureHandeFunc(process)
 	for packet := range packetSource.Packets() {
 		captured(idx, packet)
 		postCaptured()

@@ -37,8 +37,8 @@ cd ${PRJ_DIR}/dist && \
 */
 func main() {
 	grpc.Start()
-	http.Start()
 	actuator.Init()
+	http.Start()
 	cmd.WaitForSig()
 	http.Stop()
 	grpc.Stop()
