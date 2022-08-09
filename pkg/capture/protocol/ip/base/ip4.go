@@ -49,7 +49,7 @@ func (l *LayerIp4) GetSrcIp() string {
 }
 
 func (l *LayerIp4) GetDstIp() string {
-	return l.layer.SrcIP.String()
+	return l.layer.DstIP.String()
 }
 
 func (l *LayerIp4) GetPktSz() uint16 {
