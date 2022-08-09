@@ -2,10 +2,10 @@ package main
 
 import (
 	"github.com/jeevan86/learngolang/cmd/util"
-	"github.com/jeevan86/learngolang/pkg/collect/api/grpc"
+	"github.com/jeevan86/learngolang/pkg/ebpf/iovisor/gobpf"
 )
 
 func main() {
-	grpc.PrepareTestServer()
+	gobpf.Start()
 	util.WaitForSig()
 }

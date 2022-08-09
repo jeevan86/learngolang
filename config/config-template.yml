@@ -1,7 +1,7 @@
 server:
   address: 127.0.0.1:8630
 agent:
-  pcap:
+  capture:
     devices:
       - prefix: any
         duration: 2s
@@ -14,6 +14,8 @@ agent:
     par-type: routine # routine | reactor
     routine:
       parallelism: 4
+      ch-buffer-size: 2048
+      share-chan: true
     reactor:
       buffer: 2048
   collect:

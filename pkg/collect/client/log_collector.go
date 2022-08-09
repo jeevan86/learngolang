@@ -3,7 +3,7 @@ package client
 import (
 	"encoding/json"
 	"github.com/jeevan86/learngolang/pkg/collect/api"
-	"github.com/jeevan86/learngolang/pkg/pcap/protocol/ip/base"
+	"github.com/jeevan86/learngolang/pkg/capture/protocol/ip/base"
 )
 
 type logCollector struct {

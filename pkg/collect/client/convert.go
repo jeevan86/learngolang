@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/jeevan86/learngolang/pkg/pcap/protocol/ip/base"
+	"github.com/jeevan86/learngolang/pkg/capture/protocol/ip/base"
 	"github.com/jeevan86/learngolang/pkg/util/panics"
 	"strings"
 )
@@ -28,7 +28,8 @@ func (c *converter) convert(m *base.OutputStruct) interface{} {
 
 func newConverter() *converter {
 	var internal internalConverter
-	switch strings.ToLower(collectConfig.ServerType) {
+	serverType := *collectConfig.ServerType
+	switch strings.ToLower(serverType) {
 	case TypeGrpc:
 		conv := grpcConverter("grpcConverter")
 		internal = &conv

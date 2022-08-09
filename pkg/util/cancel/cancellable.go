@@ -11,12 +11,24 @@ type Cancellable struct {
 	runnable   func()
 }
 
+// StartCancelable
+// @title       创建并启动一个可以取消的执行器
+// @description 创建并启动一个可以取消的执行器
+// @auth        小卒    2022/08/03 10:57
+// @param       runnable func()       "处理函数"
+// @return      r        *Cancellable "可以启动和取消"
 func StartCancelable(runnable func()) *Cancellable {
 	dr := NewCancelable(runnable)
 	dr.Start()
 	return dr
 }
 
+// NewCancelable
+// @title       创建一个可以取消的执行器
+// @description 创建一个可以取消的执行器（使用context.WithCancel）
+// @auth        小卒    2022/08/03 10:57
+// @param       runnable func()       "处理函数"
+// @return      r        *Cancellable "可以启动和取消"
 func NewCancelable(runnable func()) *Cancellable {
 	// 新建一个上下文
 	ctx := context.Background()
@@ -29,6 +41,10 @@ func NewCancelable(runnable func()) *Cancellable {
 	}
 }
 
+// Start
+// @title       启动一个可以取消的执行器
+// @description 启动一个可以取消的执行器（使用goroutine）
+// @auth        小卒    2022/08/03 10:57
 func (r *Cancellable) Start() {
 	go func() {
 		for {
@@ -36,12 +52,16 @@ func (r *Cancellable) Start() {
 			case <-r.ctx.Done():
 				break
 			default:
-				panics.SafeRun(r.runnable)
+				_, _ = panics.SafeRun(r.runnable)
 			}
 		}
 	}()
 }
 
+// Cancel
+// @title       取消执行器的执行
+// @description 取消执行器的执行（调用context.CancelFunc）
+// @auth        小卒    2022/08/03 10:57
 func (r *Cancellable) Cancel() {
-	panics.SafeRun(r.cancelFunc)
+	_, _ = panics.SafeRun(r.cancelFunc)
 }

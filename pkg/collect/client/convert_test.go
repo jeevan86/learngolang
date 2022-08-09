@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/jeevan86/learngolang/pkg/pcap/protocol/ip/base"
+	"github.com/jeevan86/learngolang/pkg/capture/protocol/ip/base"
 	"testing"
 )
 

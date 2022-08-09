@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/jeevan86/learngolang/cmd"
+	"github.com/jeevan86/learngolang/cmd/util"
 	"github.com/jeevan86/learngolang/pkg/collect/server/grpc"
 	"github.com/jeevan86/learngolang/pkg/server/actuator"
 	"github.com/jeevan86/learngolang/pkg/server/http"
@@ -39,7 +39,7 @@ func main() {
 	grpc.Start()
 	actuator.Init()
 	http.Start()
-	cmd.WaitForSig()
+	util.WaitForSig()
 	http.Stop()
 	grpc.Stop()
 }

@@ -1,6 +1,6 @@
 package api
 
-import "github.com/jeevan86/learngolang/pkg/pcap/protocol/ip/base"
+import "github.com/jeevan86/learngolang/pkg/capture/protocol/ip/base"
 
 type CollectorApi interface {
 	Collect(*base.OutputStruct)

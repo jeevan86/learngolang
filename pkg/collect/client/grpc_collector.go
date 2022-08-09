@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/jeevan86/learngolang/pkg/collect/api/grpc"
 	"github.com/jeevan86/learngolang/pkg/collect/api/grpc/pb"
-	"github.com/jeevan86/learngolang/pkg/pcap/protocol/ip/base"
+	"github.com/jeevan86/learngolang/pkg/capture/protocol/ip/base"
 	"github.com/jeevan86/learngolang/pkg/util/arr"
 	"log"
 	"time"

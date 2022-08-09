@@ -1,18 +1,18 @@
 package config
 
 type agentConfig struct {
-	Pcap    *packetCapture `yaml:"pcap"`
-	Collect *collect       `yaml:"collect"`
+	Capture *captureConfig `yaml:"capture"`
+	Collect *collectConfig `yaml:"collect"`
 }
 
-type collect struct {
+type collectConfig struct {
 	ServerType  *string `yaml:"server-type"`
 	ServerAddr  *string `yaml:"server-addr"`
 	Parallelism *int    `yaml:"parallelism"`
 	ParBuffSize *int    `yaml:"par-buff-size"`
 }
 
-type packetCapture struct {
+type captureConfig struct {
 	Devices []deviceConfig `yaml:"devices"`
 	ParType string         `yaml:"par-type"`
 	Routine routineConfig  `yaml:"routine"`
@@ -32,7 +32,9 @@ const (
 )
 
 type routineConfig struct {
-	Parallelism int `yaml:"parallelism"`
+	Parallelism  int  `yaml:"parallelism"`
+	ChBufferSize int  `yaml:"ch-buffer-size"`
+	ShareChan    bool `yaml:"share-chan"`
 }
 
 type reactorConfig struct {

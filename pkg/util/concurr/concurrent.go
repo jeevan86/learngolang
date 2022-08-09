@@ -21,7 +21,7 @@ func (s *Sync) SyncProcess(cmd *SyncCommand) {
 
 func (s *Sync) Start() {
 	f := func(cmd *SyncCommand) {
-		panics.SafeRun(func() { cmd.Fun(cmd.Var...) })
+		_, _ = panics.SafeRun(func() { cmd.Fun(cmd.Var...) })
 	}
 	s.disposable = cancel.NewCancelable(func() {
 		for {

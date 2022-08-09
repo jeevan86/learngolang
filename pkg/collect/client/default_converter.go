@@ -3,18 +3,19 @@ package client
 import (
 	"github.com/jeevan86/learngolang/pkg/collect/api"
 	"github.com/jeevan86/learngolang/pkg/config"
-	"github.com/jeevan86/learngolang/pkg/pcap/protocol/ip/base"
-	"github.com/jeevan86/learngolang/pkg/pcap/protocol/ip/icmp"
-	"github.com/jeevan86/learngolang/pkg/pcap/protocol/ip/tcp"
-	"github.com/jeevan86/learngolang/pkg/pcap/protocol/ip/udp"
+	"github.com/jeevan86/learngolang/pkg/capture/protocol/ip/base"
+	"github.com/jeevan86/learngolang/pkg/capture/protocol/ip/icmp"
+	"github.com/jeevan86/learngolang/pkg/capture/protocol/ip/tcp"
+	"github.com/jeevan86/learngolang/pkg/capture/protocol/ip/udp"
 )
 
 type defaultConverter string
 
 func (c *defaultConverter) convert(m *base.OutputStruct) interface{} {
+	gatherIp := *config.GetConfig().NodeIp
 	converted := &api.NetStatics{
 		Timestamp: m.Bucket,
-		GatherIp:  config.GetConfig().NodeIp,
+		GatherIp:  gatherIp,
 	}
 	ip4, ip4Exists := m.Values[base.Ipv4]
 	if ip4Exists {

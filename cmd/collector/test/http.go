@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/jeevan86/learngolang/cmd"
+	"github.com/jeevan86/learngolang/cmd/util"
 	"github.com/jeevan86/learngolang/pkg/collect/api/http"
 	server "github.com/jeevan86/learngolang/pkg/server/http"
 )
@@ -9,6 +9,6 @@ import (
 func main() {
 	http.PrepareTestServer()
 	server.Start()
-	cmd.WaitForSig()
+	util.WaitForSig()
 	server.Stop()
 }

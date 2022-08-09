@@ -38,9 +38,9 @@ agent:
       parallelism: 4
     reactor:
       buffer: 2048
-  collect:
+  collectConfig:
     server-type: http # grpc | http | log
-    server-addr: "http://127.0.0.1:8630/collect" # localhost:50051 | "http://127.0.0.1:8630/collect"
+    server-addr: "http://127.0.0.1:8630/collectConfig" # localhost:50051 | "http://127.0.0.1:8630/collectConfig"
     parallelism: 1
     par-buff-size: 64
 collector:
