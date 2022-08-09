@@ -46,7 +46,7 @@ func newClient() kubernetes.Interface {
 		if collectorCfg == nil {
 			logger.Fatal("Unable to create k8s client, KubeConfig missed.")
 		}
-		if collectorCfg.KubeConfigData == nil || collectorCfg.KubeConfigFile == nil {
+		if collectorCfg.KubeConfigData == nil && collectorCfg.KubeConfigFile == nil {
 			logger.Fatal("Unable to create k8s client, KubeConfigData or KubeConfigFile missed.")
 		}
 		if collectorCfg.KubeConfigData != nil {

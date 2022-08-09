@@ -132,7 +132,7 @@ brew install protobuf
 ```zsh
 git clone git@github.com:protocolbuffers/protobuf.git
 cd protobuf && mkdir release && cd release
-cmake -Dprotobuf_BUILD_TESTS=OFF ..
+cmake -Dprotobuf_BUILD_TESTS=OFF .. # linux_x86_64下需要安装cmake、make、gcc、g++、binutils，或者直接安装protobuf
 make
 cp -f protoc $GOPATH/bin/
 ```

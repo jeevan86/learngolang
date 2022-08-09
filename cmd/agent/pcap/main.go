@@ -20,7 +20,7 @@ export PRJ_DIR=`pwd`
 cd ${PRJ_DIR}/pkg/collect/api/grpc/pb && go generate && cd ${PRJ_DIR}
 go build --ldflags "-extldflags -static" \
  -o ${PRJ_DIR}/dist/binary/gopcap-agent  \
-${PRJ_DIR}/cmd/pcap/main.go
+${PRJ_DIR}/cmd/agent/pcap/main.go
 
 cd ${PRJ_DIR}/dist && \
 dlv --listen=:8626 --headless=true --api-version=2 --accept-multiclient exec \
