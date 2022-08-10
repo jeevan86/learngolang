@@ -40,9 +40,9 @@ status:
 */
 
 type NodeIpMeta struct {
-	ClusterId string `json:"cluster-id,omitempty" yaml:"cluster-id"`
-	Name      string `json:"name,omitempty" yaml:"name"`
-	Ip        string `json:"ip,omitempty" yaml:"ip"`
+	ClusterId string `json:"clusterId,omitempty"`
+	Name      string `json:"name,omitempty"`
+	Ip        string `json:"ip,omitempty"`
 }
 
 var nodeIpMetaMap = make(map[string]*NodeIpMeta)

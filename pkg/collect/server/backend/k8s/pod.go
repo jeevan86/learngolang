@@ -9,11 +9,11 @@ import (
 
 type PodIpMeta struct {
 	ResIpMeta
-	PodName string `json:"pod-name,omitempty" yaml:"pod-name"`
-	PodIp   string `json:"pod-ip,omitempty" yaml:"pod-ip"`
-	HostIp  string `json:"host-ip,omitempty" yaml:"host-ip"`
-	AppKind string `json:"app-kind,omitempty" yaml:"app-kind"`
-	AppName string `json:"app-name,omitempty" yaml:"app-name"`
+	PodName string `json:"podName,omitempty"`
+	PodIp   string `json:"podIp,omitempty"`
+	HostIp  string `json:"hostIp,omitempty"`
+	AppKind string `json:"appKind,omitempty"`
+	AppName string `json:"appName,omitempty"`
 }
 
 var podIpMetaMap = make(map[string]*PodIpMeta)

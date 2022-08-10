@@ -1,8 +1,8 @@
 package k8s
 
 type ResIpMeta struct {
-	ClusterId string `json:"cluster-id,omitempty" yaml:"cluster-id"`
-	Namespace string `json:"namespace,omitempty" yaml:"namespace"`
+	ClusterId string `json:"clusterId,omitempty"`
+	Namespace string `json:"namespace,omitempty"`
 }
 
 func resourceKey(namespace, name string) string {

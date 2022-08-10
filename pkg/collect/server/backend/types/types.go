@@ -39,8 +39,8 @@ const (
 )
 
 type IpPort struct {
-	Ip   string `json:"ip,omitempty" yaml:"ip"`
-	Port int32  `json:"port,omitempty" yaml:"port"`
+	Ip   string `json:"ip,omitempty"`
+	Port int32  `json:"port,omitempty"`
 }
 
 type IpPortMeta struct {

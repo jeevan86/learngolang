@@ -33,10 +33,10 @@ const SrvSelectorKeyAppName = "app.kubernetes.io/name"
 
 type SrvIpMeta struct {
 	ResIpMeta
-	Name    string `json:"name,omitempty" yaml:"name"`
-	Ip      string `json:"ip,omitempty" yaml:"ip"`
-	AppKind string `json:"app-kind,omitempty" yaml:"app-kind"`
-	AppName string `json:"app-name,omitempty" yaml:"app-name"`
+	Name    string `json:"name,omitempty"`
+	Ip      string `json:"ip,omitempty"`
+	AppKind string `json:"appKind,omitempty"`
+	AppName string `json:"appName,omitempty"`
 }
 
 var srvIpMetaMap = make(map[string]*SrvIpMeta)

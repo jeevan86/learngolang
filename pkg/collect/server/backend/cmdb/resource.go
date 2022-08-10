@@ -16,11 +16,11 @@ type InstanceMeta struct {
 
 // ResIpPortMeta 内部数据对象-Ip端口对应的资源信息
 type ResIpPortMeta struct {
-	IpPort     types.IpPort `json:"ipPort" yaml:"ip-port"`
-	CiId       string       `json:"ciId,omitempty" yaml:"ci-id"`
-	CiName     string       `json:"ciName,omitempty" yaml:"ci-name"`
-	CiTypeId   string       `json:"ciTypeId,omitempty" yaml:"ci-type-id"`
-	CiTypeName string       `json:"ciTypeName,omitempty" yaml:"ci-type-name"`
+	IpPort     types.IpPort `json:"ipPort"`
+	CiId       string       `json:"ciId,omitempty"`
+	CiName     string       `json:"ciName,omitempty"`
+	CiTypeId   string       `json:"ciTypeId,omitempty"`
+	CiTypeName string       `json:"ciTypeName,omitempty"`
 }
 
 // toResIpPortMeta 接口对象转内部对象
