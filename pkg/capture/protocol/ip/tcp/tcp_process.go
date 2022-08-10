@@ -5,9 +5,18 @@ import (
 	"github.com/jeevan86/learngolang/pkg/capture/protocol/ip/base"
 )
 
-// ipTcpLayerFunc
+// ipTcpLayerFunc 根据包信息返回一个Ip层接口的实现、一个TCP结构
 type ipTcpLayerFunc func(item *base.PacketItem) (base.LayerIp, *layers.TCP)
 
+// processPackets
+// @title       processPackets
+// @description 处理ip包批次数据，返回聚合结果
+// @auth        小卒     2022/08/03 10:57
+// @param       prev   base.PacketBatch        "上一个时间窗的ip包数据"
+// @param       curr   base.PacketBatch        "要处理的ip包数据"
+// @param       next   base.PacketBatch        "下一个时间窗的ip包数据"
+// @param       f      ipTcpLayerFunc          "根据包信息返回一个Ip层接口的实现、一个TCP结构"
+// @return      r      ChannelAggregatedValues "按Channel聚合处理的结果"
 func processPackets(
 	prev, curr, next base.PacketBatch, f ipTcpLayerFunc) *ChannelAggregatedValues {
 	seqMap := make(chanSeqMap, len(curr))
@@ -18,6 +27,14 @@ func processPackets(
 	}
 }
 
+// prepareAll
+// @title       prepareAll
+// @description 准备统计ACK和SEQ相关的数据
+// @auth        小卒    2022/08/03 10:57
+// @param       seqMap chanSeqMap         "chanSeqMap"
+// @param       ackMap chanAckMap         "chanAckMap"
+// @param       f      ipTcpLayerFunc     "根据包信息返回一个Ip层接口的实现、一个TCP结构"
+// @param       all ...base.PacketBatch   "几个ip包批次"
 func prepareAll(seqMap chanSeqMap, ackMap chanAckMap, f ipTcpLayerFunc, all ...base.PacketBatch) {
 	for _, batch := range all {
 		for _, item := range batch {
@@ -26,6 +43,14 @@ func prepareAll(seqMap chanSeqMap, ackMap chanAckMap, f ipTcpLayerFunc, all ...b
 	}
 }
 
+// prepare
+// @title       prepare
+// @description 准备统计ACK和SEQ相关的数据
+// @auth        小卒    2022/08/03 10:57
+// @param       seqMap chanSeqMap         "chanSeqMap"
+// @param       ackMap chanAckMap         "chanAckMap"
+// @param       item   *base.PacketItem   "按Channel聚合处理的结果"
+// @param       f      ipTcpLayerFunc     "根据包信息返回一个Ip层接口的实现、一个TCP结构"
 func prepare(seqMap chanSeqMap, ackMap chanAckMap, item *base.PacketItem, f ipTcpLayerFunc) {
 	ip, tcp := f(item)
 	if tcp.ACK {
@@ -35,6 +60,15 @@ func prepare(seqMap chanSeqMap, ackMap chanAckMap, item *base.PacketItem, f ipTc
 	registerChSeq(seqMap, ip, tcp)
 }
 
+// aggregate
+// @title       aggregate
+// @description 将结果聚合，并返回聚合结果
+// @auth        小卒     2022/08/03 10:57
+// @param       curr   base.PacketBatch              "要处理的ip包数据"
+// @param       seqMap chanSeqMap                    "chanSeqMap"
+// @param       ackMap chanAckMap                    "chanAckMap"
+// @param       f      ipTcpLayerFunc                "根据包信息返回一个Ip层接口的实现、一个TCP结构"
+// @return      r      map[Channel]*AggregatedValues "按Channel聚合处理的结果"
 func aggregateCurr(curr base.PacketBatch,
 	seqMap chanSeqMap, ackMap chanAckMap, f ipTcpLayerFunc) map[Channel]*AggregatedValues {
 	result := make(map[Channel]*AggregatedValues, 32)
@@ -56,7 +90,7 @@ func aggregateCurr(curr base.PacketBatch,
 
 // aggregate
 // @title       aggregate
-// @description 使用cacheCreator创建缓存
+// @description 将结果聚合到result中
 // @auth        小卒     2022/08/03 10:57
 // @param       result map[Channel]*AggregatedValues "按Channel聚合处理的结果"
 // @param       seqMap chanSeqMap                    "chanSeqMap"
