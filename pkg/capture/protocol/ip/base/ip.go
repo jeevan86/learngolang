@@ -23,10 +23,22 @@ const (
 	ProtocolUdp     ProtocolClass = 4
 )
 
+// IsIpPacket
+// @title       是否是IP包
+// @description 是否是IP包
+// @auth        小卒  2022/08/03 10:57
+// @param       packet gopacket.Packet "网络包对象"
+// @return      r      bool            "是否是IP包"
 func IsIpPacket(packet gopacket.Packet) bool {
 	return Version(packet) > 0
 }
 
+// Version
+// @title       版本
+// @description IP包对应的IP版本，ip4\ip6
+// @auth        小卒  2022/08/03 10:57
+// @param       packet gopacket.Packet "网络包对象"
+// @return      r      IpVersion       "版本常量值"
 func Version(packet gopacket.Packet) IpVersion {
 	if nil != packet.Layer(layers.LayerTypeIPv4) {
 		return Ipv4
@@ -37,6 +49,7 @@ func Version(packet gopacket.Packet) IpVersion {
 	return NotIp
 }
 
+// LayerIp Ip层接口
 type LayerIp interface {
 	GetSrcIp() string
 	GetDstIp() string

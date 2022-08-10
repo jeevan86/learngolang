@@ -6,6 +6,7 @@ import (
 	"github.com/jeevan86/learngolang/pkg/capture/protocol/ip/base"
 )
 
+// Channel tcp通道，包含源目标的ip和端口
 type Channel struct {
 	SrcIp, DstIp     string
 	SrcPort, DstPort uint16

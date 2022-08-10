@@ -5,6 +5,7 @@ import (
 	"github.com/google/gopacket/layers"
 )
 
+// Ip6PacketCache 实现了通用缓存接口PacketCache
 type Ip6PacketCache struct {
 	delegate *DefaultPacketCache
 }
@@ -45,6 +46,10 @@ func (c *Ip6PacketCache) protocol(p gopacket.Packet) ProtocolClass {
 	return ProtocolUnknown
 }
 
+// init
+// @title       包初始化执行的函数
+// @description 包初始化执行的函数，将Ipv6对应的缓存创建函数注册上
+// @auth        小卒     2022/08/03 10:57
 func init() {
 	cacheCreator[Ipv6] = func(delegate *DefaultPacketCache) PacketCache {
 		return &Ip6PacketCache{delegate: delegate}

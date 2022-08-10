@@ -1,10 +1,11 @@
 package base
 
+// CommonAggregatedValues 通用的ip包聚合数据结构
 type CommonAggregatedValues struct {
-	SendCount uint64 `yaml:"send-count" json:"send_count"`
-	SendBytes uint64 `yaml:"send-bytes" json:"send_bytes"`
-	RecvCount uint64 `yaml:"recv-count" json:"recv_count"`
-	RecvBytes uint64 `yaml:"recv-bytes" json:"recv_bytes"`
-	Count     uint64 `yaml:"count" json:"count"`
-	Bytes     uint64 `yaml:"bytes" json:"bytes"`
+	SendCount uint64 `json:"send_count"`
+	SendBytes uint64 `json:"send_bytes"`
+	RecvCount uint64 `json:"recv_count"`
+	RecvBytes uint64 `json:"recv_bytes"`
+	Count     uint64 `json:"count"`
+	Bytes     uint64 `json:"bytes"`
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/jeevan86/learngolang/pkg/capture/protocol/ip/base"
 )
 
+// ipTcpLayerFunc
 type ipTcpLayerFunc func(item *base.PacketItem) (base.LayerIp, *layers.TCP)
 
 func processPackets(
@@ -53,6 +54,17 @@ func aggregateCurr(curr base.PacketBatch,
 	return result
 }
 
+// aggregate
+// @title       aggregate
+// @description 使用cacheCreator创建缓存
+// @auth        小卒     2022/08/03 10:57
+// @param       result map[Channel]*AggregatedValues "按Channel聚合处理的结果"
+// @param       seqMap chanSeqMap                    "chanSeqMap"
+// @param       ackMap chanAckMap                    "chanAckMap"
+// @param       chSeq  *chanSeq                      "*chanSeq"
+// @param       item   *base.PacketItem              "*base.PacketItem"
+// @param       ip     base.LayerIp                  "base.LayerIp"
+// @param       tcp    *layers.TCP                   "tcp数据结构"
 func aggregate(result map[Channel]*AggregatedValues, seqMap chanSeqMap, ackMap chanAckMap,
 	chSeq *chanSeq, item *base.PacketItem, ip base.LayerIp, tcp *layers.TCP) {
 	values := getOrInit(&chSeq.tcpCh, result)
@@ -70,19 +82,13 @@ func aggregate(result map[Channel]*AggregatedValues, seqMap chanSeqMap, ackMap c
 	fillCloseValues(values, tcp)
 }
 
-func isRetransmit(chSeq *chanSeq, seqMap chanSeqMap) bool {
-	key := *chSeq
-	retransmit := false
-	seqCnt, ok := seqMap[key]
-	if !ok {
-		seqMap[key] = 1
-	} else {
-		seqMap[key] = seqCnt + 1
-		retransmit = true
-	}
-	return retransmit
-}
-
+// getOrInit
+// @title       getOrInit
+// @description 根据channel从result中获得或者初始化一个AggregatedValues结构指针
+// @auth        小卒    2022/08/03 10:57
+// @param       channel Channel                       "tcp通道"
+// @param       result  map[Channel]*AggregatedValues "聚合处理的结果"
+// @return      r       *AggregatedValues             "聚合结构的指针"
 func getOrInit(channel *Channel, result map[Channel]*AggregatedValues) *AggregatedValues {
 	ch := *channel
 	values, ok := result[ch]
@@ -109,6 +115,13 @@ func getOrInit(channel *Channel, result map[Channel]*AggregatedValues) *Aggregat
 	return values
 }
 
+// fillCommonValues
+// @title       fillCommonValues
+// @description 计算并修改values值
+// @auth        小卒     2022/08/03 10:57
+// @param       values *AggregatedValues "聚合结构的指针"
+// @param       pktSz  uint16            "包大小"
+// @param       ch     *Channel          "tcp通道"
 func fillCommonValues(values *AggregatedValues, pktSz uint16, ch *Channel) {
 	// 发送的包总字节数、数量
 	sBytes := values.SendBytes
@@ -140,6 +153,14 @@ func fillCommonValues(values *AggregatedValues, pktSz uint16, ch *Channel) {
 	values.Count = count
 }
 
+// fillConnectValues
+// @title       fillConnectValues
+// @description 计算并填充tcp连接相关的聚合结果
+// @auth        小卒     2022/08/03 10:57
+// @param       values *AggregatedValues "聚合结构的指针"
+// @param       seqMap chanSeqMap                    "chanSeqMap"
+// @param       ip     base.LayerIp                  "ip层信息"
+// @param       tcp    *layers.TCP                   "tcp数据结构"
 func fillConnectValues(values *AggregatedValues, seqMap chanSeqMap, ip base.LayerIp, tcp *layers.TCP) {
 	// 第一次握手
 	synCount := values.Syn
@@ -184,6 +205,12 @@ func fillConnectValues(values *AggregatedValues, seqMap chanSeqMap, ip base.Laye
 	values.Ack = ackCount
 }
 
+// fillResetValues
+// @title       fillResetValues
+// @description 计算并填充tcp的重置相关的聚合结果
+// @auth        小卒     2022/08/03 10:57
+// @param       values *AggregatedValues "聚合结构的指针"
+// @param       tcp    *layers.TCP                   "tcp数据结构"
 func fillResetValues(values *AggregatedValues, tcp *layers.TCP) {
 	rstCount := values.Rst
 	if tcp.RST {
@@ -192,12 +219,47 @@ func fillResetValues(values *AggregatedValues, tcp *layers.TCP) {
 	values.Rst = rstCount
 }
 
+// fillRetransmitValues
+// @title       fillRetransmitValues
+// @description 计算并填充tcp的重传相关的聚合结果
+// @auth        小卒     2022/08/03 10:57
+// @param       values *AggregatedValues "聚合结构的指针"
+// @param       chSeq  *chanSeq          "*chanSeq"
+// @param       seqMap chanSeqMap        "chanSeqMap"
 func fillRetransmitValues(values *AggregatedValues, chSeq *chanSeq, seqMap chanSeqMap) {
 	if isRetransmit(chSeq, seqMap) {
 		values.Retransmit = values.Retransmit + 1
 	}
 }
 
+// isRetransmit
+// @title       isRetransmit
+// @description 判断是否是tcp重传
+// @auth        小卒    2022/08/03 10:57
+// @param       chSeq  *chanSeq          "*chanSeq"
+// @param       seqMap chanSeqMap        "chanSeqMap"
+func isRetransmit(chSeq *chanSeq, seqMap chanSeqMap) bool {
+	key := *chSeq
+	retransmit := false
+	seqCnt, ok := seqMap[key]
+	if !ok {
+		seqMap[key] = 1
+	} else {
+		seqMap[key] = seqCnt + 1
+		retransmit = true
+	}
+	return retransmit
+}
+
+// fillRttValues
+// @title       fillRttValues
+// @description 计算并填充tcp的Rtt相关的聚合结果
+// @auth        小卒     2022/08/03 10:57
+// @param       values *AggregatedValues "聚合结构的指针"
+// @param       item   *base.PacketItem              "Ip包信息"
+// @param       ip     base.LayerIp                  "Ip层结构"
+// @param       tcp    *layers.TCP                   "tcp数据结构"
+// @param       ackMap chanAckMap                    "chanAckMap"
 func fillRttValues(values *AggregatedValues,
 	item *base.PacketItem, ip base.LayerIp, tcp *layers.TCP, ackMap chanAckMap) {
 	// 从非ACK的包开始找，仅处理普通ACK，不处理连接和关闭的
@@ -209,8 +271,12 @@ func fillRttValues(values *AggregatedValues,
 	}
 }
 
-// fillCloseValues 处理挥手
-// 对于确定源、目标的tcp包，挥手只是Fin、FinAck
+// fillCloseValues
+// @title       fillCloseValues
+// @description 计算并填充tcp的挥手相关的聚合结果，对于确定源、目标的tcp包，挥手只是Fin、FinAck
+// @auth        小卒     2022/08/03 10:57
+// @param       values  *AggregatedValues "聚合结构的指针"
+// @param       tcp     *layers.TCP       "tcp数据结构"
 func fillCloseValues(values *AggregatedValues, tcp *layers.TCP) {
 	// Fin
 	finCount := values.Fin

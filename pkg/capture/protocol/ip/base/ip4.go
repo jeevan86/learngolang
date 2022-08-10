@@ -25,6 +25,14 @@ type ttl int8
 // 如果还有后续报文，接收主机则将接收到的报文放在缓存直到接收完所有具有相同标识符的数据报，然后再进行重组。
 type flag int8
 
+// flushIp4
+// @title       flushIp4
+// @description 数据交给ip4Processor函数处理、清理、返回打包后的批次数据
+// @auth        小卒  2022/08/03 10:57
+// @param       keyNext int64 "下一个时间窗的时间戳，作为缓存的KEY"
+// @param       keyCurr int64 "当前的时间窗的时间戳，作为缓存的KEY"
+// @param       keyPrev int64 "上一个时间窗的时间戳，作为缓存的KEY"
+// @return      r       map[ProtocolClass]interface{} "打包后的批次"
 func (p *PacketProcessor) flushIp4(keyNext, keyCurr, keyPrev int64) map[ProtocolClass]interface{} {
 	prev := p.ip4PacketCache.GetBatch(keyPrev)
 	curr := p.ip4PacketCache.GetBatch(keyCurr)
@@ -34,6 +42,7 @@ func (p *PacketProcessor) flushIp4(keyNext, keyCurr, keyPrev int64) map[Protocol
 	return ip4
 }
 
+// LayerIp4 使用gopacket的layers.Ipv4结构
 type LayerIp4 struct {
 	layer *layers.IPv4
 }
