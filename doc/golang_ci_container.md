@@ -11,14 +11,14 @@ docker pull alpine:3.8.5
 
 ```dockerfile
 FROM alpine:3.16.0
-RUN ln -s /lib /lib64                                          \
- && cp -f /etc/apk/repositories /etc/apk/origin_repositories   \
- && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g'    \
-     /etc/apk/repositories                                     \
- && apk add --no-cache                                         \
-     musl libgcc libstdc++ libc6-compat libffi zlib libxml2    \ 
-     openssh-server zsh curl linux-pam iproute2 tzdata openssh \
- && cp -f /etc/apk/origin_repositories /etc/apk/repositories   \
+RUN ln -s /lib /lib64                                         \
+ && cp -f /etc/apk/repositories /etc/apk/origin_repositories  \
+ && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g'   \
+     /etc/apk/repositories                                    \
+ && apk add --no-cache                                        \
+     musl libgcc libstdc++ libc6-compat libffi zlib libxml2   \
+     openssh zsh curl linux-pam iproute2 tzdata               \
+ && cp -f /etc/apk/origin_repositories /etc/apk/repositories  \
  && rm -rf /var/cache/apk/*
 ```
 #### alpine-utils:3.9.6
@@ -26,14 +26,14 @@ RUN ln -s /lib /lib64                                          \
 
 ```dockerfile
 FROM alpine:3.9.6
-RUN ln -s /lib /lib64                                          \
- && cp -f /etc/apk/repositories /etc/apk/origin_repositories   \
- && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g'    \
-     /etc/apk/repositories                                     \
- && apk add --no-cache                                         \
-     musl libgcc libstdc++ libc6-compat libffi zlib libxml2    \
-     openssh-server zsh curl linux-pam iproute2 tzdata openssh \
- && cp -f /etc/apk/origin_repositories /etc/apk/repositories   \
+RUN ln -s /lib /lib64                                         \
+ && cp -f /etc/apk/repositories /etc/apk/origin_repositories  \
+ && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g'   \
+     /etc/apk/repositories                                    \
+ && apk add --no-cache                                        \
+     musl libgcc libstdc++ libc6-compat libffi zlib libxml2   \
+     openssh zsh curl linux-pam iproute2 tzdata               \
+ && cp -f /etc/apk/origin_repositories /etc/apk/repositories  \
  && rm -rf /var/cache/apk/*
 ```
 #### alpine-utils:3.8.5
@@ -41,14 +41,14 @@ RUN ln -s /lib /lib64                                          \
 
 ```dockerfile
 FROM alpine:3.8.5
-RUN ln -s /lib /lib64                                          \
- && cp -f /etc/apk/repositories /etc/apk/origin_repositories   \
- && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g'    \
-     /etc/apk/repositories                                     \
- && apk add --no-cache                                         \
-     musl libgcc libstdc++ libc6-compat libffi zlib libxml2    \
-     openssh-server zsh curl linux-pam iproute2 tzdata openssh \
- && cp -f /etc/apk/origin_repositories /etc/apk/repositories   \
+RUN ln -s /lib /lib64                                         \
+ && cp -f /etc/apk/repositories /etc/apk/origin_repositories  \
+ && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g'   \
+     /etc/apk/repositories                                    \
+ && apk add --no-cache                                        \
+     musl libgcc libstdc++ libc6-compat libffi zlib libxml2   \
+     openssh zsh curl linux-pam iproute2 tzdata               \
+ && cp -f /etc/apk/origin_repositories /etc/apk/repositories  \
  && rm -rf /var/cache/apk/*
 ```
 
@@ -64,7 +64,8 @@ RUN ln -s /lib /lib64                                         \
      /etc/apk/repositories                                    \
  && apk add --no-cache                                        \
      llvm13-libs llvm13-dev llvm13-static llvm13              \
-     llvm13-test-utils clang linux-headers cmake make         \
+     llvm13-test-utils linux-headers                          \
+     clang gcc g++ cmake make binutils git                    \
  && cp -f /etc/apk/origin_repositories /etc/apk/repositories  \
  && rm -rf /var/cache/apk/*
 ```
@@ -79,7 +80,7 @@ RUN ln -s /lib /lib64                                         \
      /etc/apk/repositories                                    \
  && apk add --no-cache                                        \
      llvm5-libs llvm5-dev llvm5-static llvm5-test-utils llvm5 \
-     clang linux-headers cmake make                           \
+     clang gcc g++ linux-headers cmake make binutils git      \
  && cp -f /etc/apk/origin_repositories /etc/apk/repositories  \
  && rm -rf /var/cache/apk/*
 ```
@@ -94,7 +95,7 @@ RUN ln -s /lib /lib64                                         \
      /etc/apk/repositories                                    \
  && apk add --no-cache                                        \
      llvm5-libs llvm5-dev llvm5-static llvm5-test-utils llvm5 \
-     clang linux-headers  cmake make                          \
+     clang gcc g++ linux-headers cmake make binutils git      \
  && cp -f /etc/apk/origin_repositories /etc/apk/repositories  \
  && rm -rf /var/cache/apk/*
 ```
@@ -140,11 +141,10 @@ ENV GO111MODULE=auto                            \
     GO_BASEDIR=/opt/golang                      \
     GO_TARBALL=go1.17.11.linux-amd64.tar.gz     \
     PATH=${PATH}:${GOROOT}/bin
-RUN mkdir /root/.ssh && chmod 700 /root/.ssh    \
- && cp -f /etc/apk/repositories /etc/apk/origin_repositories  \
- && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g'   \
-     /etc/apk/repositories                                    \
- && apk add --no-cache libpcap-doc libpcap-dev libpcap git    \
+RUN mkdir /root/.ssh && chmod 700 /root/.ssh                                     \
+ && cp -f /etc/apk/repositories /etc/apk/origin_repositories                     \
+ && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g'/etc/apk/repositories \
+ && apk add --no-cache libpcap-doc libpcap-dev libpcap git protobuf              \
  && cp -f /etc/apk/origin_repositories /etc/apk/repositories
 COPY ${GO_TARBALL} /opt/${GO_TARBALL}
 RUN mkdir -p ${GOROOT}                              \
@@ -175,11 +175,10 @@ ENV GO111MODULE=auto                            \
     GO_BASEDIR=/opt/golang                      \
     GO_TARBALL=go1.17.11.linux-amd64.tar.gz     \
     PATH=${PATH}:${GOROOT}/bin
-RUN mkdir /root/.ssh && chmod 700 /root/.ssh    \
- && cp -f /etc/apk/repositories /etc/apk/origin_repositories  \
- && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g'   \
-     /etc/apk/repositories                                    \
- && apk add --no-cache libpcap-doc libpcap-dev libpcap git    \
+RUN mkdir /root/.ssh && chmod 700 /root/.ssh                                     \
+ && cp -f /etc/apk/repositories /etc/apk/origin_repositories                     \
+ && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g'/etc/apk/repositories \
+ && apk add --no-cache libpcap-doc libpcap-dev libpcap git protobuf              \
  && cp -f /etc/apk/origin_repositories /etc/apk/repositories
 COPY ${GO_TARBALL} /opt/${GO_TARBALL}
 RUN mkdir -p ${GOROOT}                              \
@@ -210,11 +209,10 @@ ENV GO111MODULE=auto                            \
     GO_BASEDIR=/opt/golang                      \
     GO_TARBALL=go1.17.11.linux-amd64.tar.gz     \
     PATH=${PATH}:${GOROOT}/bin
-RUN mkdir /root/.ssh && chmod 700 /root/.ssh    \
- && cp -f /etc/apk/repositories /etc/apk/origin_repositories  \
- && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g'   \
-     /etc/apk/repositories                                    \
- && apk add --no-cache libpcap-doc libpcap-dev libpcap git    \
+RUN mkdir /root/.ssh && chmod 700 /root/.ssh                                     \
+ && cp -f /etc/apk/repositories /etc/apk/origin_repositories                     \
+ && sed -i 's/dl-cdn.alpinelinux.org/mirrors.ustc.edu.cn/g'/etc/apk/repositories \
+ && apk add --no-cache libpcap-doc libpcap-dev libpcap git protobuf              \
  && cp -f /etc/apk/origin_repositories /etc/apk/repositories
 COPY ${GO_TARBALL} /opt/${GO_TARBALL}
 RUN mkdir -p ${GOROOT}                              \
