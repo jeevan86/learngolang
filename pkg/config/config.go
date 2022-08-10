@@ -1,3 +1,8 @@
+// Package config
+// @Title  用于解析和保存配置
+// @Description  用于解析和保存配置
+// @Author  小卒  2022/08/03 10:57
+// @Update  小卒  2022/08/03 10:57
 package config
 
 import (

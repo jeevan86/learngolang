@@ -19,7 +19,7 @@ agent:
     reactor:
       buffer: 2048
   collect:
-    server-type: grpc            # grpc | http | log
+    server-type: log             # grpc | http | log
     server-addr: localhost:50051 # localhost:50051 | "http://127.0.0.1:8630/collect"
     parallelism: 1
     par-buff-size: 64

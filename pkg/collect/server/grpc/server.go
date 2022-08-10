@@ -45,6 +45,12 @@ func newGrpcServer() *grpc.Server {
 	)
 }
 
+// newLisAttr
+// @title       newLisAttr
+// @description 从启动参数或配置文件获取监听地址
+// @auth        小卒     2022/08/03 10:57
+// @return      lisType string     "监听的类型tcp"
+// @return      lisAddr string     "监听地址ip端口"
 func newLisAttr() (lisType string, lisAddr string) {
 	lisType = "tcp"
 	if *flag.GrpcHost != "" && *flag.GrpcPort == -1 {

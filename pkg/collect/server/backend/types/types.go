@@ -1,3 +1,8 @@
+// Package types
+// @Title  用于定义一些后端的数据结构
+// @Description  用于定义一些后端的数据结构
+// @Author  小卒  2022/08/03 10:57
+// @Update  小卒  2022/08/03 10:57
 package types
 
 type IpPortType string
